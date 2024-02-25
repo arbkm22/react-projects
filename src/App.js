@@ -6,16 +6,27 @@ function App() {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (inputValue.trim() !== '') {
-            setTasks([...tasks, inputValue]);
+            setTasks([...tasks, { text: inputValue.trim(), checked: false }]);
             setInputValue('');
         }
         console.log('inputValue: ', inputValue);
         console.log('tasks: ', tasks);
     }
 
-    const handleChange = (e) => {
-        let inpVal = e.target.value;
-        setInputValue(inpVal);
+    const handleCheckboxChange = (index) => {
+        const updatedTasks = [...tasks];
+        updatedTasks[index].checked = !updatedTasks[index].checked;
+        setTasks(updatedTasks);
+    }
+
+    function displayItems(item) {
+        return (
+            <label>
+                <span style={{textDecoration: item.checked ? 'line-through' : 'none'}}>
+                    {item.text}
+                </span>
+            </label>
+        )
     }
 
     const [inputValue, setInputValue] = useState("");
@@ -29,16 +40,21 @@ function App() {
                     <input
                         name="item"
                         placeholder="Add New"
-                        className="input-box" 
+                        className="input-box"
                         value={inputValue}
-                        onChange={handleChange} />
+                        onChange={(e) => setInputValue(e.target.value)} />
                 </form>
                 <div className="added-items">
-                    <ul>
-                        {tasks.map((item, index) => (
-                            <li key={index}>{item}</li>
-                        ))}
-                    </ul>
+                    {tasks.map((item, index) => (
+                        <div className="task-list">
+                            <input
+                                type="checkbox"
+                                checked={item.checked}
+                                onChange={() => handleCheckboxChange(index)}>
+                            </input>
+                            {displayItems(item)}
+                        </div>
+                    ))}
                 </div>
             </div>
         </div>
