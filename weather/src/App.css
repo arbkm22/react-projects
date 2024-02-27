@@ -1,8 +1,10 @@
 .App {
+  background-image: url("assets/clouds.jpg");
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column
+  flex-direction: column;
+  height: 100vh;
 }
 
 .input {
@@ -11,6 +13,11 @@
 
 .input-box {
   width: 50vw;
+  border: none;
+  outline: none;
+  height: 2rem;
+  padding: 2px 20px;
+  border-radius: 30px;
 }
 
 .weather {
@@ -21,9 +28,10 @@
 }
 
 .main {
-  width: 200px; /* adjust width as needed */
-  height: 200px; /* adjust height as needed */
-  background-color: lightblue;
+  width: 600px; /* adjust width as needed */
+  height: 400px; /* adjust height as needed */
+  /* background-color: lightblue; */
+  border: 1px solid black;
   text-align: center;
   line-height: 200px; /* same as height for vertical centering of text */
 }
