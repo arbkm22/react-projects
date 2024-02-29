@@ -9,8 +9,9 @@ function App() {
     const [inputValue, setInputValue] = useState("");
     const [city, setCity] = useState("");
     const [show, setShow] = useState(false);
-    const [searchResponse, setSearchResponse] = useState("");
-    const [resp, setResp] = useState([]);
+    const [searchResponse, setSearchResponse] = useState([]);
+
+    const [formData, setFormData] = useState({});
 
     const handleChange = (e) => {
         setInputValue(e.target.value);
@@ -21,35 +22,29 @@ function App() {
             try {
                 const response = await fetch(`http://dataservice.accuweather.com/locations/v1/cities/search?apikey=${process.env.REACT_APP_ACCUWEATHER}&q=${inputValue}`);
                 const data = await response.json();
-                setSearchResponse(data.data);
+                console.log('data: ', data);
+                setSearchResponse(data);
             } catch (error) {
                 console.error('Error fetching Weather Data: ', error);
             }
+            console.log('searchResponse: ', searchResponse);
         };
-        fetchData();
-    }, []);
+        if (Object.keys(formData).length !== 0) {
+            fetchData();
+        }
+    }, [formData]);
 
+    useEffect(() => {
+        setCity(inputValue);
+    }, [inputValue]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (inputValue != undefined && inputValue != null) {
-            console.log('inputValue: ', inputValue);
-            const inpVal = inputValue;
-            setCity(inpVal);
-        }
         console.log('city: ', city);
-        
-        // API call
-        axios.get(`http://dataservice.accuweather.com/locations/v1/cities/search?apikey=${process.env.REACT_APP_ACCUWEATHER}&q=${inputValue}`)
-        .then(response => {
-            setSearchResponse(response.data);
-        })
-        .catch(error => {
-            console.log('error calling api: ', error);  
-        });
+        setFormData({cityName: city});
 
         handleShow()
-        // setInputValue('');
+        setInputValue('');
     }
 
     const handleShow = (e) => setShow(true);
@@ -88,16 +83,14 @@ function App() {
                     <Modal.Title>Select City</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    {/* {resp && (
-                        <ul>
-                            {resp.map((item, index) => {
-                                <li key={index}>
-                                    <strong>City: </strong> {item.LocalizedName},
-                                </li>
-                            })}
-                        </ul>
-                    )} */}
-                    {resp}
+                    <ul>
+                        {searchResponse.map((item, index) => (
+                            <li key='index'>
+                                <strong>City:</strong> {item.LocalizedName},
+                                <strong>Country: </strong> {item.Country.LocalizedName}
+                            </li>
+                        ))}
+                    </ul>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button 
