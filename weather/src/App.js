@@ -1,35 +1,55 @@
 import './App.css';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import Modal from 'react-bootstrap/Modal'
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
 
 function App() {
 
     const [inputValue, setInputValue] = useState("");
     const [city, setCity] = useState("");
     const [show, setShow] = useState(false);
+    const [searchResponse, setSearchResponse] = useState("");
+    const [resp, setResp] = useState([]);
 
     const handleChange = (e) => {
         setInputValue(e.target.value);
     }
 
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`http://dataservice.accuweather.com/locations/v1/cities/search?apikey=${process.env.REACT_APP_ACCUWEATHER}&q=${inputValue}`);
+                const data = await response.json();
+                setSearchResponse(data.data);
+            } catch (error) {
+                console.error('Error fetching Weather Data: ', error);
+            }
+        };
+        fetchData();
+    }, []);
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        setCity(inputValue);
-        console.log('inputValue: ', inputValue);
+        if (inputValue != undefined && inputValue != null) {
+            console.log('inputValue: ', inputValue);
+            const inpVal = inputValue;
+            setCity(inpVal);
+        }
+        console.log('city: ', city);
         
         // API call
         axios.get(`http://dataservice.accuweather.com/locations/v1/cities/search?apikey=${process.env.REACT_APP_ACCUWEATHER}&q=${inputValue}`)
         .then(response => {
-            console.log('api response: ', response);
+            setSearchResponse(response.data);
         })
         .catch(error => {
             console.log('error calling api: ', error);  
         });
 
         handleShow()
-        setInputValue('');
+        // setInputValue('');
     }
 
     const handleShow = (e) => setShow(true);
@@ -68,10 +88,24 @@ function App() {
                     <Modal.Title>Select City</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    Select your city
+                    {/* {resp && (
+                        <ul>
+                            {resp.map((item, index) => {
+                                <li key={index}>
+                                    <strong>City: </strong> {item.LocalizedName},
+                                </li>
+                            })}
+                        </ul>
+                    )} */}
+                    {resp}
                 </Modal.Body>
                 <Modal.Footer>
-                    <button>Close</button>
+                    <Button 
+                        onClick={handleClose}
+                        variant='primary'
+                        size='sm'>
+                        Close
+                    </Button>
                 </Modal.Footer>
             </Modal>
         </>
