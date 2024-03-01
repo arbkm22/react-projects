@@ -1,10 +1,11 @@
 import './App.css';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 
 function App() {
+
+    // TODO : Migrate from Accuweahter -> OpenWeather
 
     const [inputValue, setInputValue] = useState("");
     const [city, setCity] = useState("");
@@ -19,15 +20,26 @@ function App() {
 
     useEffect(() => {
         const fetchData = async () => {
+            // try {
+            //     const response = await fetch(`http://dataservice.accuweather.com/locations/v1/cities/search?apikey=${process.env.REACT_APP_ACCUWEATHER}&q=${inputValue}`);
+            //     const data = await response.json();
+            //     console.log('data: ', data);
+            //     setSearchResponse(data);
+            // } catch (error) {
+            //     console.error('Error fetching Weather Data: ', error);
+            // }
+
             try {
-                const response = await fetch(`http://dataservice.accuweather.com/locations/v1/cities/search?apikey=${process.env.REACT_APP_ACCUWEATHER}&q=${inputValue}`);
+                const response = await fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=5&appid=${process.env.REACT_APP_OPENWEATHER}`);
                 const data = await response.json();
-                console.log('data: ', data);
+                console.log('openweather: ', data);
                 setSearchResponse(data);
+                // console.log('searchResponse: ', searchResponse);
             } catch (error) {
-                console.error('Error fetching Weather Data: ', error);
+                console.error('Error fetching data from OpenWeather: ', error)
             }
-            console.log('searchResponse: ', searchResponse);
+
+            // console.log('searchResponse: ', searchResponse);
         };
         if (Object.keys(formData).length !== 0) {
             fetchData();
@@ -49,6 +61,11 @@ function App() {
 
     const handleShow = (e) => setShow(true);
     const handleClose = (e) => setShow(false);
+
+    const handleClick = (city, state, countryCode) => {
+        console.log(`city: ${city} | state: ${state} | countryCode: ${countryCode}`);
+        handleClose();
+    }
     
     return (
         <>
@@ -83,14 +100,19 @@ function App() {
                     <Modal.Title>Select City</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <ul>
+                    {/* <ul> */}
+
                         {searchResponse.map((item, index) => (
-                            <li key='index'>
-                                <strong>City:</strong> {item.LocalizedName},
-                                <strong>Country: </strong> {item.Country.LocalizedName}
-                            </li>
+                            <div 
+                                key={index} 
+                                onClick={() => handleClick(item.name, item.state, item.country)}
+                                className="searchResponse"
+                            >
+                                <strong>City:</strong> {item.name},
+                                <strong>State: </strong> {item.state}
+                            </div>
                         ))}
-                    </ul>
+                    {/* </ul> */}
                 </Modal.Body>
                 <Modal.Footer>
                     <Button 
