@@ -2,6 +2,8 @@ import './App.css';
 import { useEffect, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
+import CitySearch from './components/CitySearch';
+import Weather from './components/Weather';
 
 function App() {
 
@@ -11,8 +13,10 @@ function App() {
     const [city, setCity] = useState("");
     const [show, setShow] = useState(false);
     const [searchResponse, setSearchResponse] = useState([]);
-
+    const [weather, setWeather] = useState([]);
     const [formData, setFormData] = useState({});
+    const [isZoomed, setIsZoomed] = useState(false);
+    const [pos, setPos] = useState([]);
 
     const handleChange = (e) => {
         setInputValue(e.target.value);
@@ -20,15 +24,6 @@ function App() {
 
     useEffect(() => {
         const fetchData = async () => {
-            // try {
-            //     const response = await fetch(`http://dataservice.accuweather.com/locations/v1/cities/search?apikey=${process.env.REACT_APP_ACCUWEATHER}&q=${inputValue}`);
-            //     const data = await response.json();
-            //     console.log('data: ', data);
-            //     setSearchResponse(data);
-            // } catch (error) {
-            //     console.error('Error fetching Weather Data: ', error);
-            // }
-
             try {
                 const response = await fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=5&appid=${process.env.REACT_APP_OPENWEATHER}`);
                 const data = await response.json();
@@ -40,11 +35,34 @@ function App() {
             }
 
             // console.log('searchResponse: ', searchResponse);
-        };
+        }
         if (Object.keys(formData).length !== 0) {
             fetchData();
         }
     }, [formData]);
+
+    useEffect(() => {
+        const fetchWeather = async () => {
+            try {
+                // const response = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${pos[0]}&lon=${pos[1]}&units=metric&appid=${process.env.REACT_APP_OPENWEATHER}`);
+                
+                // current weather api call
+                const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${pos[0]}&lon=${pos[1]}&units=metric&appid=${process.env.REACT_APP_OPENWEATHER}`);
+                const data = await response.json();
+                console.log('current weather: ', data);
+                // setWeather(data.list);
+                let weatherData = [];
+                weatherData.push(data);
+                console.log('weatherData: ', weatherData);
+                setWeather(weatherData);
+            } catch (error) {
+                console.error('Error fetching weather: ', error);
+            }
+        }
+        if (pos.length !== 0) {
+            fetchWeather();
+        }
+    }, [pos]);
 
     useEffect(() => {
         setCity(inputValue);
@@ -62,9 +80,19 @@ function App() {
     const handleShow = (e) => setShow(true);
     const handleClose = (e) => setShow(false);
 
-    const handleClick = (city, state, countryCode) => {
-        console.log(`city: ${city} | state: ${state} | countryCode: ${countryCode}`);
+    const handleClick = (city) => {
+        console.log(`city: ${city.name} | lat: ${city.lat} | long: ${city.lon}`);
+        const selectedPos = [city.lat, city.lon];
+        setPos(selectedPos);
         handleClose();
+    }
+
+    const handleMouseEnter = () => {
+        setIsZoomed(true);
+    }
+
+    const handleMouseLeave = () => {
+        setIsZoomed(false);
     }
     
     return (
@@ -83,11 +111,7 @@ function App() {
                 </form>
                 <div className="weather">
                     <p>Weather App</p>
-                    <div className="main">
-                        <div className="display">
-                            {city}
-                        </div>  
-                    </div>
+                    <Weather data={weather} />
                 </div>
             </div>
             <Modal
@@ -100,19 +124,18 @@ function App() {
                     <Modal.Title>Select City</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    {/* <ul> */}
-
                         {searchResponse.map((item, index) => (
                             <div 
                                 key={index} 
-                                onClick={() => handleClick(item.name, item.state, item.country)}
-                                className="searchResponse"
+                                onClick={() => handleClick(item)}
+                                onMouseEnter={handleMouseEnter}
+                                onMouseLeave={handleMouseLeave}
+                                className={`search-container zoom-container${isZoomed ? '.zoomed' : ''}`}
                             >
                                 <strong>City:</strong> {item.name},
                                 <strong>State: </strong> {item.state}
                             </div>
                         ))}
-                    {/* </ul> */}
                 </Modal.Body>
                 <Modal.Footer>
                     <Button 

@@ -36,7 +36,7 @@
   line-height: 200px; /* same as height for vertical centering of text */
 }
 
-.searchResponse {
+.search-container {
   padding: 10px 10px;
   /* margin: 0; */
   cursor: pointer;
@@ -48,6 +48,20 @@
 
 .searchResponse:hover {
   background: lightgray;
+}
+
+.zoom-container {
+  transition: transform 0.3 ease;
+}
+
+.zoom-container.zoomed {
+  transform: scale(1.1);
+}
+
+.weather-data {
+  height: 400px;
+  width: 600px;
+  /* border: 1px solid black; */
 }
 
 @media (prefers-reduced-motion: no-preference) {
