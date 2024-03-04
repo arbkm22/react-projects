@@ -9,8 +9,11 @@ function Weather(props) {
                         key={index}
                         className='weather-data'
                     >
-                        <img src={`http://openweathermap.org/img/w/${item.weather[0].icon}.png`}></img>
-                        <div>Current Temp: {item.main.temp}</div>
+                        <img 
+                            src={`http://openweathermap.org/img/w/${item.weather[0].icon}.png`}
+                            className="weather-icon"
+                        ></img>
+                        <div className="weather-stat">Current Temp: {item.main.temp}</div>
                     </div>
                 ))}
             </div>
