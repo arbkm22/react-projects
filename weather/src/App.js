@@ -7,8 +7,6 @@ import Weather from './components/Weather';
 
 function App() {
 
-    // TODO : Migrate from Accuweahter -> OpenWeather
-
     const [inputValue, setInputValue] = useState("");
     const [city, setCity] = useState("");
     const [show, setShow] = useState(false);
