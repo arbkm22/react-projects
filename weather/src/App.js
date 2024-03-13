@@ -15,6 +15,7 @@ function App() {
     const [formData, setFormData] = useState({});
     const [isZoomed, setIsZoomed] = useState(false);
     const [pos, setPos] = useState([]);
+    const [weatherIcon, setWeatherIcon] = useState("");
 
     const handleChange = (e) => {
         setInputValue(e.target.value);
@@ -29,7 +30,7 @@ function App() {
                 setSearchResponse(data);
                 // console.log('searchResponse: ', searchResponse);
             } catch (error) {
-                console.error('Error fetching data from OpenWeather: ', error)
+                console.error('Error fetching data from OpenWeather: ', error);
             }
 
             // console.log('searchResponse: ', searchResponse);
@@ -47,12 +48,15 @@ function App() {
                 // current weather api call
                 const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${pos[0]}&lon=${pos[1]}&units=metric&appid=${process.env.REACT_APP_OPENWEATHER}`);
                 const data = await response.json();
-                console.log('current weather: ', data);
+                // console.log('current weather: ', data);
                 // setWeather(data.list);
                 let weatherData = [];
                 weatherData.push(data);
-                console.log('weatherData: ', weatherData);
                 setWeather(weatherData);
+                console.log('weather: ', weatherData[0].weather[0].main);
+                if (weatherData[0].weather[0].main !== undefined || weatherData[0].weather[0].main !== null) {
+                    setWeatherIcon(weatherData[0].weather[0].main);
+                }
             } catch (error) {
                 console.error('Error fetching weather: ', error);
             }
@@ -108,8 +112,7 @@ function App() {
                         onChange={handleChange} />
                 </form>
                 <div className="weather">
-                    <p>Weather App</p>
-                    <Weather data={weather} />
+                    <Weather data={weather} weatherIcon={weatherIcon} />
                 </div>
             </div>
             <Modal
