@@ -1,5 +1,4 @@
 .App {
-  background-image: url("assets/clouds.jpg");
   display: flex;
   justify-content: center;
   align-items: center;
@@ -28,12 +27,13 @@
 }
 
 .main {
+  border-radius: 25px;
+  background-color: #F2F2F2;
   width: 600px; /* adjust width as needed */
   height: 400px; /* adjust height as needed */
-  /* background-color: lightblue; */
-  border: 1px solid black;
+  /* border: 1px solid black; */
   text-align: center;
-  /*line-height: 200px; /* same as height for vertical centering of text */
+  box-shadow:4px 4px 10px #c5c5c5;
 }
 
 .search-container {
@@ -66,11 +66,18 @@
 
 .first-row {
   display: flex;
+  flex: 1;
   align-items: center;
+  justify-content: center;
+  height: 400px;
 }
 
 .second-row {
   display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
 }
 
 .weather-icon {
