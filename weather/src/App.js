@@ -84,6 +84,7 @@ function App() {
 
     const handleClick = (city) => {
         console.log(`city: ${city.name} | lat: ${city.lat} | long: ${city.lon}`);
+        setCity(city.name);
         const selectedPos = [city.lat, city.lon];
         setPos(selectedPos);
         handleClose();
@@ -112,7 +113,7 @@ function App() {
                         onChange={handleChange} />
                 </form>
                 <div className="weather">
-                    <Weather data={weather} weatherIcon={weatherIcon} />
+                    <Weather data={weather} weatherIcon={weatherIcon} city={city} />
                 </div>
             </div>
             <Modal

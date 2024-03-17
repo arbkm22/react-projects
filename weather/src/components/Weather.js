@@ -5,7 +5,9 @@ function Weather(props) {
     const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const now = new Date();
     const day = now.getDay();
-    const currentTime = new Date().toLocaleTimeString();
+    let currentTime = new Date().toLocaleTimeString();
+    let modifiedTime = currentTime.substring(0, currentTime.length - 6) + ' ' + currentTime.substring(currentTime.length - 2);
+    currentTime = modifiedTime;
 
     return (
         <div className="main">
@@ -20,18 +22,16 @@ function Weather(props) {
                             className="weather-icon"
                             alt="weather icon"
                         ></img>
-                        
                     </div>
                     <div className="second-row">
-                        <div className="weather-stat">{Math.round(item.main.temp)}{'\u00b0'}C</div>
-                        
-                        {
-                            <div className="right-items">
-                                <p>{days[day]}, {currentTime}</p>
-                                <p>{(item.weather[0].description)}</p>
-                            </div>
-                        }
-                    </div> 
+                        <div className="weather-stat">{Math.round(item.main.temp)}{'\u00b0'}</div>
+                        <div className="top">
+                            <p>{(item.weather[0].main)}</p>
+                        </div>
+                        <div className="bot">
+                            <p>{days[day]}, {currentTime}</p>
+                        </div>                        
+                    </div>
                 </div>
             ))}
         </div>
