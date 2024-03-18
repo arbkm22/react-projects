@@ -34,10 +34,11 @@
   border-radius: 25px;
   background-color: #F2F2F2;
   width: 600px; /* adjust width as needed */
-  height: 250px; /* adjust height as needed */
+  height: 360px; /* adjust height as needed */
   /* border: 1px solid black; */
   text-align: center;
   box-shadow:4px 4px 10px #c5c5c5;
+  padding-top: 40px;
 }
 
 .search-container {
@@ -65,7 +66,7 @@
 .weather-data {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  /* align-items: center; */
 }
 
 .city-name {

@@ -11,6 +11,7 @@ function Weather(props) {
 
     return (
         <div className="main">
+            <div className="city-name">{props.city}</div>
             {props.data && props.data.map((item, index) => (
                 <div 
                     key={index}
