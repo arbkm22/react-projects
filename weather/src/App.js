@@ -72,7 +72,6 @@ function App() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('city: ', city);
         setFormData({cityName: city});
 
         handleShow()
