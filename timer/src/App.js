@@ -1,34 +1,31 @@
 import './App.css';
 import React, { useEffect, useRef, useState } from "react";
 function App() {
-    // let count = 59;
     const [count, setCount] = useState(0);
-    const [click, setClick] = useState(0);
-    // let tempCount = 0;
+    const [isRunning, setIsRunning] = useState(false);
     const timreRef = useRef(null);
 
-    function runTimer() {
-        timreRef.current = setInterval(() => {
-
-            setCount((prevCount) => {
-                return prevCount + 1;
-            });
-        }, 1000);
-    };
-
     useEffect(() => {
-        runTimer();
+        setIsRunning(true);
     }, []);
 
-    function handleClick() {
-        runTimer();
-    }
+    useEffect(() => {
+        if (isRunning) {
+            timreRef.current = setInterval(() => {
+                setCount((prevCount) => {
+                    return prevCount + 1;
+                });
+            }, 1000);
+        } else {
+            clearInterval(timreRef.current);
+        }
+        return () => clearInterval(timreRef.current);
+    }, [isRunning]);
 
     return (
         <div className="App">
             <header className="App-header">
             <h1>Timer: {count}</h1>
-            <button onClick={handleClick}>Click me:</button>
             </header>
         </div>
     );
