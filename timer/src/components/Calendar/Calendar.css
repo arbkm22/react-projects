@@ -1,0 +1,130 @@
+
+.calendar {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+}
+
+.timer {
+  margin-bottom: 15px;
+  font-size: 35px;
+  font-weight: 600;
+  font-family: 'Space Mono';
+  color: #EEEEEE;
+}
+
+.calendar-item {
+  text-align: center;
+}
+
+.flip {
+  background-color: #333;
+  color: #fff;
+  font-size: 3rem;
+  width: 100px;
+  height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  position: relative;
+  overflow: hidden;
+}
+
+.flip:before,
+.flip:after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 50%;
+  background-color: #333;
+  z-index: 1;
+}
+
+.flip:before {
+  top: 0;
+  border-bottom: 2px solid #555;
+}
+
+.flip:after {
+  bottom: 0;
+  border-top: 2px solid #555;
+}
+
+.flip .top,
+.flip .bottom {
+  position: absolute;
+  width: 100%;
+  height: 50%;
+  overflow: hidden;
+  backface-visibility: hidden;
+}
+
+.flip .top {
+  top: 0;
+  transform-origin: bottom;
+}
+
+.flip .bottom {
+  bottom: 0;
+  transform-origin: top;
+}
+
+.flip .next {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+}
+
+.flip .next .top,
+.flip .next .bottom {
+  position: absolute;
+  width: 100%;
+  height: 50%;
+  overflow: hidden;
+  background-color: #333;
+  z-index: 2;
+}
+
+.flip .next .top {
+  top: 0;
+  transform-origin: bottom;
+  transform: rotateX(-90deg);
+}
+
+.flip .next .bottom {
+  bottom: 0;
+  transform-origin: top;
+  transform: rotateX(90deg);
+}
+
+.flip .front,
+.flip .back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backface-visibility: hidden;
+  z-index: 3;
+}
+
+.flip .front {
+  background-color: #333;
+  color: #fff;
+}
+
+.flip .back {
+  background-color: #444;
+  color: #fff;
+  transform: rotateX(-180deg);
+}
+
+.label {
+  margin-top: 10px;
+  font-size: 1.2rem;
+  color: white;
+}
